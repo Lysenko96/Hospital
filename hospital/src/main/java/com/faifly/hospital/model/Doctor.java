@@ -24,17 +24,11 @@ public class Doctor {
     private String lastName;
     private TimeZone timezone;
     @ToString.Exclude
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name = "visit",
             joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private List<Patient> patients = new ArrayList<>();
     @OneToMany(mappedBy = "doctor")
     private List<Visit> visits = new ArrayList<>();
-
-
-    public void addVisit(Visit visit) {
-        visit.setDoctor(this);
-        visits.add(visit);
-    }
 }

@@ -25,9 +25,4 @@ public class Patient {
     private List<Doctor> doctors = new ArrayList<>();
     @OneToMany(mappedBy = "patient")
     private List<Visit> visits = new ArrayList<>();
-
-    public void addVisit(Visit visit) {
-        visit.setPatient(this);
-        visits.add(visit);
-    }
 }

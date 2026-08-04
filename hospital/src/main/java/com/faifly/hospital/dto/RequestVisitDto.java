@@ -9,7 +9,6 @@ import lombok.ToString;
 @ToString
 public class RequestVisitDto {
 
-
     private String start;
     private String end;
     private Integer patientId;
