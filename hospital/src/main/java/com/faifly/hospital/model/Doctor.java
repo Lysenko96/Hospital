@@ -24,8 +24,7 @@ public class Doctor {
     private String lastName;
     private TimeZone timezone;
     @ToString.Exclude
-//    @ManyToMany(fetch = FetchType.EAGER)
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name = "visit",
             joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id"))

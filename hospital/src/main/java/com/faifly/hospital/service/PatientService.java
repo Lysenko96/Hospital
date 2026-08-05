@@ -11,8 +11,10 @@ import com.faifly.hospital.repository.DoctorRepository;
 import com.faifly.hospital.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,32 +24,50 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PatientService {
 
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private Map<Long, Integer> patientsSizeByDoctorId = new HashMap<>();
 
-    public void getPatientsByFilter() {
-
+    public ResponsePatientDto getPatientsByFilter(String search, List<Long> doctorIds) {
+        List<Doctor> doctors = doctorRepository.findAll();
+        patientsSizeByDoctorId = doctors.stream().collect(toMap(Doctor::getId, d -> d.getPatients().size()));
+        List<Patient> patients = new ArrayList<>();
+        if (search != null && doctorIds != null) {
+            patients = patientRepository.findByNameAndDoctorIds(search, doctorIds);
+        } else if (search != null) {
+            patients = patientRepository.findByName(search);
+        } else if (doctorIds != null) {
+            patients = patientRepository.findByDoctorIds(doctorIds);
+        }
+        return ResponsePatientDto.builder()
+                .data(patients.stream()
+                        .map(p -> PatientData.builder()
+                                .firstName(p.getFirstName())
+                                .lastName(p.getLastName())
+                                .lastVisits(toVisitDto(p.getVisits()))
+                                .build())
+                        .collect(toList()))
+                .count(patients.size())
+                .build();
     }
 
     public ResponsePatientDto getAllPatients() {
         List<Doctor> doctors = doctorRepository.findAll();
         patientsSizeByDoctorId = doctors.stream().collect(toMap(Doctor::getId, d -> d.getPatients().size()));
         List<Patient> patients = patientRepository.findAll();
-        List<PatientData> patientData = patients.stream()
-                .map(p -> PatientData.builder()
-                        .firstName(p.getFirstName())
-                        .lastName(p.getLastName())
-                        .lastVisits(toVisitDto(p.getVisits()))
-                        .build())
-                .collect(toList());
-        ResponsePatientDto responsePatientDto = ResponsePatientDto.builder()
-                .data(patientData)
+        return ResponsePatientDto.builder()
+                .data(patients.stream()
+                        .map(p -> PatientData.builder()
+                                .firstName(p.getFirstName())
+                                .lastName(p.getLastName())
+                                .lastVisits(toVisitDto(p.getVisits()))
+                                .build())
+                        .collect(toList()))
                 .count(patients.size())
                 .build();
-        return responsePatientDto;
     }
 
     private List<VisitDto> toVisitDto(List<Visit> visits) {

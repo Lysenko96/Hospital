@@ -30,7 +30,7 @@ public class HospitalController {
         if (search == null && doctorIds == null) {
             responsePatientDto = patientService.getAllPatients();
         } else {
-            patientService.getPatientsByFilter();
+            responsePatientDto = patientService.getPatientsByFilter(search, doctorIds);
         }
         return ResponseEntity.ok(responsePatientDto);
     }

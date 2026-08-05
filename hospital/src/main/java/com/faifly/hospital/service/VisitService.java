@@ -9,7 +9,6 @@ import com.faifly.hospital.repository.DoctorRepository;
 import com.faifly.hospital.repository.PatientRepository;
 import com.faifly.hospital.repository.VisitRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class VisitService {
 
     private final VisitRepository visitRepository;
