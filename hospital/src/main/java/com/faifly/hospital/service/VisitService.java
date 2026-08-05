@@ -1,5 +1,6 @@
 package com.faifly.hospital.service;
 
+import com.faifly.hospital.controller.VisitException;
 import com.faifly.hospital.dto.RequestVisitDto;
 import com.faifly.hospital.model.Doctor;
 import com.faifly.hospital.model.Patient;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,24 +29,29 @@ public class VisitService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
 
-    public void save(RequestVisitDto visitDto) {
-        Optional<Patient> patient = patientRepository.findById(Long.valueOf(visitDto.getPatientId()));
-        Optional<Doctor> doctor = doctorRepository.findById(Long.valueOf(visitDto.getDoctorId()));
+    public void createVisit(RequestVisitDto visitDto) {
+        Optional<Patient> patient = patientRepository.findById(visitDto.getPatientId());
+        if (patient.isEmpty()) {
+            throw new NoSuchElementException("patientId is not exists");
+        }
+        Optional<Doctor> doctor = doctorRepository.findById(visitDto.getDoctorId());
+        if (doctor.isEmpty()) {
+            throw new NoSuchElementException("doctorId is not exists");
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         List<Visit> existsVisits = visitRepository.findByStartDateTimeAndEndDateTimeBetween(
                 OffsetDateTime.parse(visitDto.getStart(), formatter),
                 OffsetDateTime.parse(visitDto.getEnd(), formatter)
         );
-        System.out.println("#####EXISTSVISITS");
-        System.out.println(existsVisits);
         if (!existsVisits.isEmpty()) {
-            log.info("visit by time exists");
-            return;
+            throw new VisitException("Visit between start and end exists");
         }
-        Visit visit = new Visit(OffsetDateTime.parse(visitDto.getStart(), formatter),
-                OffsetDateTime.parse(visitDto.getEnd(), formatter),
-                patient.orElseThrow(), doctor.orElseThrow());
-        visitRepository.save(visit);
+        visitRepository.save(Visit.builder()
+                .startDateTime(OffsetDateTime.parse(visitDto.getStart(), formatter))
+                .endDateTime(OffsetDateTime.parse(visitDto.getEnd(), formatter))
+                .patient(patient.get())
+                .doctor(doctor.get())
+                .build());
     }
 
 }

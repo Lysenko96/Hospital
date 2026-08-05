@@ -11,6 +11,6 @@ public class RequestVisitDto {
 
     private String start;
     private String end;
-    private Integer patientId;
-    private Integer doctorId;
+    private Long patientId;
+    private Long doctorId;
 }

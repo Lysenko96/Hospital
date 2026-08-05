@@ -1,10 +1,7 @@
 package com.faifly.hospital.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 
@@ -12,6 +9,7 @@ import java.time.OffsetDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "visit")
 public class Visit {
 
@@ -24,17 +22,9 @@ public class Visit {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false, foreignKey = @ForeignKey(name = "fk_patient_visit"))
     private Patient patient;
-    @ToString.Exclude
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_doctor_visit"))
     private Doctor doctor;
-
-    public Visit(OffsetDateTime startDateTime, OffsetDateTime endDateTime, Patient patient, Doctor doctor) {
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.patient = patient;
-        this.doctor = doctor;
-    }
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;

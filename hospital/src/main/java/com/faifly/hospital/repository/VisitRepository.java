@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
-    Visit findByStartDateTimeAndEndDateTime(OffsetDateTime start, OffsetDateTime end);
-
-    @Query("select v from Visit v join fetch v.patient and join fetch v.doctor where startDateTime between :start and :end or endDateTime between :start and :end")
+    @Query("select v from Visit v left join fetch v.patient and left join fetch v.doctor where startDateTime between :start and :end or endDateTime between :start and :end")
     List<Visit> findByStartDateTimeAndEndDateTimeBetween(OffsetDateTime start, OffsetDateTime end);
 }

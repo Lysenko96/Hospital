@@ -21,6 +21,7 @@ public class Patient {
     private Long id;
     private String firstName;
     private String lastName;
+    @ToString.Exclude
     @ManyToMany(mappedBy = "patients")
     private List<Doctor> doctors = new ArrayList<>();
     @OneToMany(mappedBy = "patient")
