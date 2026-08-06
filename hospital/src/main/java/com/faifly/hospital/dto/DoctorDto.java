@@ -12,5 +12,5 @@ public class DoctorDto {
 
     private String firstName;
     private String lastName;
-    private int totalPatients;
+    private long totalPatients;
 }

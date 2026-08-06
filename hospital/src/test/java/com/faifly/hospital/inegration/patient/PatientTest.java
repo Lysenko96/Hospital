@@ -55,8 +55,8 @@ class PatientTest {
                 .lastName("Zero")
                 .doctors(new ArrayList<>(Arrays.asList(doctor1, doctor2)))
                 .build();
-        patient.getDoctors().get(0).setPatients(Arrays.asList(patient));
-        patient.getDoctors().get(1).setPatients(Arrays.asList(patient));
+        patient.getDoctors().get(0).setPatients(new HashSet<>(Arrays.asList(patient)));
+        patient.getDoctors().get(1).setPatients(new HashSet<>(Arrays.asList(patient)));
 
         visit1.setPatient(patient);
         visit2.setPatient(patient);
@@ -120,8 +120,8 @@ class PatientTest {
                 .lastName("Zero")
                 .doctors(new ArrayList<>(Arrays.asList(doctor1, doctor2)))
                 .build();
-        patient.getDoctors().get(0).setPatients(Arrays.asList(patient));
-        patient.getDoctors().get(1).setPatients(Arrays.asList(patient));
+        patient.getDoctors().get(0).setPatients(new HashSet<>(Arrays.asList(patient)));
+        patient.getDoctors().get(1).setPatients(new HashSet<>(Arrays.asList(patient)));
 
         visit1.setPatient(patient);
 
@@ -189,8 +189,8 @@ class PatientTest {
                 .lastName("Zero")
                 .doctors(new ArrayList<>(Arrays.asList(doctor1, doctor2)))
                 .build();
-        patient.getDoctors().get(0).setPatients(Arrays.asList(patient));
-        patient.getDoctors().get(1).setPatients(Arrays.asList(patient));
+        patient.getDoctors().get(0).setPatients(new HashSet<>(Arrays.asList(patient)));
+        patient.getDoctors().get(1).setPatients(new HashSet<>(Arrays.asList(patient)));
 
         visit1.setPatient(patient);
         visit2.setPatient(patient);
@@ -204,7 +204,7 @@ class PatientTest {
                 .doctors(new ArrayList<>(Arrays.asList(doctor2)))
                 .build();
 
-        patient2.getDoctors().get(0).setPatients(Arrays.asList(patient2));
+        patient2.getDoctors().get(0).setPatients(new HashSet<>(Arrays.asList(patient2)));
 
         var visit3 = Visit.builder()
                 .id(3L)

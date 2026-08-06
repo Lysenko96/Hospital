@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-    @Query("select d from Doctor d left join fetch d.patients")
+    @Query("select distinct d from Doctor d join fetch d.patients")
     List<Doctor> findAll();
 }
