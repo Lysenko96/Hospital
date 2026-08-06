@@ -13,7 +13,7 @@ public class DatasourceConfig {
 
     @Bean
     public ResourceDatabasePopulator databasePopulator(DataSource dataSource) {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(new ClassPathResource("/sql/schema.sql"));
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(new ClassPathResource("/sql/data.sql"));
         DatabasePopulatorUtils.execute(populator, dataSource);
         return populator;
     }

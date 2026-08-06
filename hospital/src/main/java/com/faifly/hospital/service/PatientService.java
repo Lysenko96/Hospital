@@ -15,12 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +26,8 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
-    private Map<Long, Integer> patientsSizeByDoctorId = new HashMap<>();
 
     public ResponsePatientDto getPatientsByFilter(String search, List<Long> doctorIds) {
-        List<Doctor> doctors = doctorRepository.findAll();
-        patientsSizeByDoctorId = doctors.stream().collect(toMap(Doctor::getId, d -> d.getPatients().size()));
         List<Patient> patients = new ArrayList<>();
         if (search != null && doctorIds != null) {
             patients = patientRepository.findByNameAndDoctorIds(search, doctorIds);
@@ -55,8 +49,6 @@ public class PatientService {
     }
 
     public ResponsePatientDto getAllPatients() {
-        List<Doctor> doctors = doctorRepository.findAll();
-        patientsSizeByDoctorId = doctors.stream().collect(toMap(Doctor::getId, d -> d.getPatients().size()));
         List<Patient> patients = patientRepository.findAll();
         return ResponsePatientDto.builder()
                 .data(patients.stream()
@@ -87,7 +79,7 @@ public class PatientService {
         return DoctorDto.builder()
                 .firstName(doctor.getFirstName())
                 .lastName(doctor.getLastName())
-                .totalPatients(patientsSizeByDoctorId.get(doctor.getId()))
+                .totalPatients(doctor.getPatients().size())
                 .build();
     }
 
