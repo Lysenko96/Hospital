@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
 public class PatientService {
 
     private final PatientRepository patientRepository;
-    private final DoctorRepository doctorRepository;
 
     public ResponsePatientDto getPatientsByFilter(String search, List<Long> doctorIds) {
         List<Patient> patients = new ArrayList<>();
