@@ -1,10 +1,7 @@
 package com.faifly.hospital.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import tools.jackson.databind.PropertyNamingStrategies;
-import tools.jackson.databind.annotation.JsonNaming;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "patients")
 public class Patient {
 
@@ -22,8 +20,10 @@ public class Patient {
     private String firstName;
     private String lastName;
     @ToString.Exclude
+    @Builder.Default
     @ManyToMany(mappedBy = "patients")
     private List<Doctor> doctors = new ArrayList<>();
     @OneToMany(mappedBy = "patient")
+    @Builder.Default
     private List<Visit> visits = new ArrayList<>();
 }

@@ -4,8 +4,8 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
+@Setter
 @ToString
 @Builder
 public class VisitDto {

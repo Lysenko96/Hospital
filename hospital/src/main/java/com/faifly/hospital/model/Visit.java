@@ -10,7 +10,9 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "visit")
+@Table(name = "visit", uniqueConstraints = @UniqueConstraint(
+        columnNames = {"startDateTime", "endDateTime"}
+))
 public class Visit {
 
     @Id

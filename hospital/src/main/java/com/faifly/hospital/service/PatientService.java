@@ -71,12 +71,15 @@ public class PatientService {
     }
 
     private List<VisitDto> toVisitDto(List<Visit> visits) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
-        return visits.stream().map(v -> VisitDto.builder()
-                        .start(formatter.format(v.getStartDateTime()))
-                        .end(formatter.format(v.getEndDateTime()))
-                        .doctor(toDoctorDto(v.getDoctor()))
-                        .build())
+        return visits.stream().map(v -> {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z")
+                            .withZone(v.getDoctor().getTimezone().toZoneId());
+                    return VisitDto.builder()
+                            .start(formatter.format(v.getStartDateTime()))
+                            .end(formatter.format(v.getEndDateTime()))
+                            .doctor(toDoctorDto(v.getDoctor()))
+                            .build();
+                })
                 .collect(toList());
     }
 

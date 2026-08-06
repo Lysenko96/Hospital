@@ -35,7 +35,7 @@ public class HospitalController {
         return ResponseEntity.ok(responsePatientDto);
     }
 
-    @PostMapping("/visit")
+    @PostMapping("/addVisit")
     public ResponseEntity<RequestVisitDto> createVisit(@RequestBody RequestVisitDto visitDto) {
         visitService.createVisit(visitDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(visitDto);

@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice(basePackageClasses = HospitalController.class)
-public class InvalidArgumentExceptionAdvice {
+public class HospitalExceptionAdvice {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleInvalidArgumentXException(Exception e) {
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
     }
