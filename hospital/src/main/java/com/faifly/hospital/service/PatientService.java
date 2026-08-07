@@ -7,7 +7,6 @@ import com.faifly.hospital.dto.VisitDto;
 import com.faifly.hospital.model.Doctor;
 import com.faifly.hospital.model.Patient;
 import com.faifly.hospital.model.Visit;
-import com.faifly.hospital.repository.DoctorRepository;
 import com.faifly.hospital.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class PatientService {
                         .map(p -> PatientData.builder()
                                 .firstName(p.getFirstName())
                                 .lastName(p.getLastName())
-                                .lastVisits(toVisitDto(p.getVisits()))
+                                .lastVisits(toVisitDto(p.getVisits()).getFirst())
                                 .build())
                         .collect(toList()))
                 .count(patients.size())
@@ -54,7 +53,7 @@ public class PatientService {
                         .map(p -> PatientData.builder()
                                 .firstName(p.getFirstName())
                                 .lastName(p.getLastName())
-                                .lastVisits(toVisitDto(p.getVisits()))
+                                .lastVisits(toVisitDto(p.getVisits()).getFirst())
                                 .build())
                         .collect(toList()))
                 .count(patients.size())

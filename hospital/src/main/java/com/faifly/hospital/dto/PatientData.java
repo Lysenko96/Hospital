@@ -15,6 +15,5 @@ public class PatientData {
 
     private String firstName;
     private String lastName;
-    @Builder.Default
-    private List<VisitDto> lastVisits = new ArrayList<>();
+    private VisitDto lastVisits;
 }

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -37,11 +36,11 @@ public class VisitService {
             throw new NoSuchElementException("doctorId is not exists");
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
-        List<Visit> existsVisits = visitRepository.findByStartDateTimeAndEndDateTimeBetween(
+        Long exists = visitRepository.findByStartDateTimeAndEndDateTimeBetween(
                 OffsetDateTime.parse(visitDto.getStart(), formatter),
                 OffsetDateTime.parse(visitDto.getEnd(), formatter)
         );
-        if (!existsVisits.isEmpty()) {
+        if (exists != null &&exists > 0) {
             throw new VisitException("Visit between start and end exists");
         }
         visitRepository.save(Visit.builder()

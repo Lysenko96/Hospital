@@ -20,7 +20,7 @@ public class Doctor {
     private String lastName;
     private TimeZone timezone;
     @ToString.Exclude
-//    @EqualsAndHashCode.Exclude // for test
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @Builder.Default
     @JoinTable(name = "visit",
