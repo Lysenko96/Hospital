@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -39,7 +41,7 @@ public class PatientService {
                         .map(p -> PatientData.builder()
                                 .firstName(p.getFirstName())
                                 .lastName(p.getLastName())
-                                .lastVisits(toVisitDto(p.getVisits()).getFirst())
+                                .lastVisits(new ArrayList<>(Arrays.asList(toVisitDto(p.getVisits()))))
                                 .build())
                         .collect(toList()))
                 .count(patients.size())
@@ -53,24 +55,23 @@ public class PatientService {
                         .map(p -> PatientData.builder()
                                 .firstName(p.getFirstName())
                                 .lastName(p.getLastName())
-                                .lastVisits(toVisitDto(p.getVisits()).getFirst())
+                                .lastVisits(new ArrayList<>(Arrays.asList(toVisitDto(p.getVisits()))))
                                 .build())
                         .collect(toList()))
                 .count(patients.size())
                 .build();
     }
 
-    private List<VisitDto> toVisitDto(List<Visit> visits) {
+    private VisitDto toVisitDto(List<Visit> visits) {
         return visits.stream().map(v -> {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z")
-                            .withZone(v.getDoctor().getTimezone().toZoneId());
-                    return VisitDto.builder()
-                            .start(formatter.format(v.getStartDateTime()))
-                            .end(formatter.format(v.getEndDateTime()))
-                            .doctor(toDoctorDto(v.getDoctor()))
-                            .build();
-                })
-                .collect(toList());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z")
+                    .withZone(v.getDoctor().getTimezone().toZoneId());
+            return VisitDto.builder()
+                    .start(formatter.format(v.getStartDateTime()))
+                    .end(formatter.format(v.getEndDateTime()))
+                    .doctor(toDoctorDto(v.getDoctor()))
+                    .build();
+        }).max(Comparator.comparing(VisitDto::getEnd)).orElse(null);
     }
 
     private DoctorDto toDoctorDto(Doctor doctor) {
