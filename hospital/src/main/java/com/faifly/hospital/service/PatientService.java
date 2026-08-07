@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class PatientService {
 
     private final PatientRepository patientRepository;
